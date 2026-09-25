@@ -102,12 +102,19 @@ function Dashboard() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" onClick={() => setUploadOpen(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setUploadOpen(true)}
+            >
               Upload audio
             </Button>
             <ThemeToggle className="mr-2" />
             {authLoading || loading ? (
-              <div className="text-sm text-muted-foreground">Loading...</div>
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
+                <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+              </div>
             ) : user ? (
               <UserMenu
                 user={user}
@@ -138,7 +145,11 @@ function Dashboard() {
         <AudiosTable showToast={showToast} />
       </main>
 
-      <UploadAudioDialog open={uploadOpen} onOpenChange={setUploadOpen} showToast={showToast} />
+      <UploadAudioDialog
+        open={uploadOpen}
+        onOpenChange={setUploadOpen}
+        showToast={showToast}
+      />
       <ToastViewport toasts={toasts} />
     </div>
   )
@@ -164,7 +175,7 @@ function ToastViewport({ toasts }: { toasts: ToastItem[] }) {
   if (toasts.length === 0) return null
 
   return (
-    <div className="pointer-events-none fixed right-4 top-4 z-[60] flex w-full max-w-sm flex-col gap-2">
+    <div className="pointer-events-none fixed top-4 right-4 z-[60] flex w-full max-w-sm flex-col gap-2">
       {toasts.map((toast) => (
         <div
           key={toast.id}
@@ -240,7 +251,10 @@ function UserMenu({
           ? selectedAmount
           : 0
 
-    if (selectedAmount === "custom" && (!Number.isFinite(amount) || amount < 1)) {
+    if (
+      selectedAmount === "custom" &&
+      (!Number.isFinite(amount) || amount < 1)
+    ) {
       setCheckoutError("Custom amount must be at least $1.")
       return
     }
@@ -260,7 +274,9 @@ function UserMenu({
       window.location.href = checkoutUrl
     } catch (err: any) {
       const message =
-        err?.response?.data?.detail || err?.message || "Could not create checkout session."
+        err?.response?.data?.detail ||
+        err?.message ||
+        "Could not create checkout session."
       setCheckoutError(message)
       showToast("error", "Checkout failed", message)
     } finally {
@@ -295,12 +311,14 @@ function UserMenu({
         </button>
 
         {menuOpen ? (
-          <div className="absolute right-0 top-full z-20 mt-2 w-72 rounded-xl border border-border bg-popover p-3 shadow-lg">
+          <div className="absolute top-full right-0 z-20 mt-2 w-72 rounded-xl border border-border bg-popover p-3 shadow-lg">
             <div className="mb-3 rounded-lg bg-muted/50 px-3 py-2">
-              <div className="text-xs uppercase tracking-wide text-muted-foreground">
+              <div className="text-xs tracking-wide text-muted-foreground uppercase">
                 Credits balance
               </div>
-              <div className="mt-1 text-lg font-semibold">${(user.credits ?? 0).toFixed(2)}</div>
+              <div className="mt-1 text-lg font-semibold">
+                ${(user.credits ?? 0).toFixed(2)}
+              </div>
             </div>
 
             <div className="space-y-2 text-sm">
@@ -401,7 +419,10 @@ function UserMenu({
 
               {selectedAmount === "custom" ? (
                 <div className="space-y-2">
-                  <label htmlFor="custom-credit-amount" className="text-sm font-medium">
+                  <label
+                    htmlFor="custom-credit-amount"
+                    className="text-sm font-medium"
+                  >
                     Amount in USD
                   </label>
                   <input
@@ -522,7 +543,9 @@ function UploadAudioDialog({
       }
     } catch (err: any) {
       setUploadError(
-        err?.response?.data?.detail || err?.message || "Could not upload sound effect."
+        err?.response?.data?.detail ||
+          err?.message ||
+          "Could not upload sound effect."
       )
     } finally {
       event.target.value = ""
@@ -556,7 +579,11 @@ function UploadAudioDialog({
 
       await queryClient.invalidateQueries({ queryKey: ["audios"] })
       closeDialog()
-      showToast("success", "Audio uploaded", "Your audio was uploaded successfully.")
+      showToast(
+        "success",
+        "Audio uploaded",
+        "Your audio was uploaded successfully."
+      )
     } catch (err: any) {
       const message =
         err?.response?.data?.detail || err?.message || "Could not upload audio."
@@ -579,7 +606,12 @@ function UploadAudioDialog({
               Configure how the audio should be censored before submitting.
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={closeDialog} type="button">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={closeDialog}
+            type="button"
+          >
             Close
           </Button>
         </div>
@@ -589,7 +621,10 @@ function UploadAudioDialog({
             <label className="text-sm font-medium">Audio file</label>
             {!selectedFile ? (
               <div className="flex items-center gap-3">
-                <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
+                <Button
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                >
                   Choose audio
                 </Button>
                 <input
@@ -633,7 +668,7 @@ function UploadAudioDialog({
               value={customWords}
               onChange={(event) => setCustomWords(event.target.value)}
               placeholder="e.g. damn, crap, idiot"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none ring-0 placeholder:text-muted-foreground focus:border-ring"
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-0 outline-none placeholder:text-muted-foreground focus:border-ring"
             />
           </div>
 
@@ -658,7 +693,9 @@ function UploadAudioDialog({
                     {effect.name}
                   </option>
                 ))}
-                <option value="__upload_new__">Upload new sound effect...</option>
+                <option value="__upload_new__">
+                  Upload new sound effect...
+                </option>
               </select>
               <Button
                 type="button"
@@ -689,7 +726,11 @@ function UploadAudioDialog({
           <Button variant="outline" onClick={closeDialog} type="button">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={!selectedFile || isSubmitting} type="button">
+          <Button
+            onClick={handleSubmit}
+            disabled={!selectedFile || isSubmitting}
+            type="button"
+          >
             {isSubmitting ? "Submitting..." : "Submit audio"}
           </Button>
         </div>
@@ -698,7 +739,11 @@ function UploadAudioDialog({
   )
 }
 
-function AudiosTable({ showToast }: { showToast: (type: ToastType, title: string, description: string) => void }) {
+function AudiosTable({
+  showToast,
+}: {
+  showToast: (type: ToastType, title: string, description: string) => void
+}) {
   const { accessToken, isLoggedIn } = useAuthInfo()
   const previousActiveStatuses = useRef<string[]>([])
 
@@ -721,7 +766,8 @@ function AudiosTable({ showToast }: { showToast: (type: ToastType, title: string
 
   useEffect(() => {
     const activeRows = (data ?? []).filter(
-      (audio: any) => audio.status === "pending" || audio.status === "processing"
+      (audio: any) =>
+        audio.status === "pending" || audio.status === "processing"
     )
 
     if (activeRows.length === 0) {
@@ -729,14 +775,18 @@ function AudiosTable({ showToast }: { showToast: (type: ToastType, title: string
       return
     }
 
-    const activeStatuses = activeRows.map((audio: any) => audio.status).join(",")
+    const activeStatuses = activeRows
+      .map((audio: any) => audio.status)
+      .join(",")
     if (activeStatuses !== previousActiveStatuses.current.join(",")) {
       showToast(
         "processing",
         "Audio being processed",
         "This audio is still being processed. Status updates will refresh automatically."
       )
-      previousActiveStatuses.current = activeRows.map((audio: any) => audio.status)
+      previousActiveStatuses.current = activeRows.map(
+        (audio: any) => audio.status
+      )
     }
   }, [data, showToast])
 
@@ -745,22 +795,41 @@ function AudiosTable({ showToast }: { showToast: (type: ToastType, title: string
       const res = await api.audio.downloadAudio(id)
       const url = res.data?.file_url
       if (url) window.open(url, "_blank", "noopener,noreferrer")
-      else showToast("error", "Download unavailable", "No downloadable file was returned.")
+      else
+        showToast(
+          "error",
+          "Download unavailable",
+          "No downloadable file was returned."
+        )
     } catch (e: any) {
-      const message = e?.response?.data?.detail || e?.message || "Download failed."
+      const message =
+        e?.response?.data?.detail || e?.message || "Download failed."
       showToast("error", "Download failed", message)
     }
   }
 
   const handleDownloadSubtitle = async (id: string) => {
     try {
-      const res = await api.audio.downloadSubtitle(id, { symbol: "*", visible_chars: 1 })
+      const res = await api.audio.downloadSubtitle(id, {
+        symbol: "*",
+        visible_chars: 1,
+      })
       const url = res.data?.file_url ?? res.data?.url ?? res.data?.download_url
       if (url) window.open(url, "_blank", "noopener,noreferrer")
-      else showToast("error", "Subtitle unavailable", "No subtitle file was returned.")
-      showToast("success", "Subtitle ready", "The subtitle download has started.")
+      else
+        showToast(
+          "error",
+          "Subtitle unavailable",
+          "No subtitle file was returned."
+        )
+      showToast(
+        "success",
+        "Subtitle ready",
+        "The subtitle download has started."
+      )
     } catch (e: any) {
-      const message = e?.response?.data?.detail || e?.message || "Subtitle download failed."
+      const message =
+        e?.response?.data?.detail || e?.message || "Subtitle download failed."
       showToast("error", "Subtitle download failed", message)
     }
   }
@@ -773,7 +842,36 @@ function AudiosTable({ showToast }: { showToast: (type: ToastType, title: string
     )
   }
 
-  if (isLoading) return <div className="mt-6 text-sm">Loading audios...</div>
+  if (isLoading)
+    return (
+      <div className="mt-6 overflow-hidden rounded-lg border border-border bg-card">
+        <div className="overflow-x-auto">
+          <table className="w-full table-fixed text-sm">
+            <thead className="bg-muted/50 text-left text-muted-foreground">
+              <tr>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <th key={index} className="px-4 py-3 font-medium">
+                    <div className="h-4 w-20 animate-pulse rounded bg-muted" />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 4 }).map((_, rowIndex) => (
+                <tr key={rowIndex} className="border-t border-border">
+                  {Array.from({ length: 6 }).map((__, cellIndex) => (
+                    <td key={`${rowIndex}-${cellIndex}`} className="px-4 py-3">
+                      <div className="h-4 w-full animate-pulse rounded bg-muted" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )
+
   if (error)
     return (
       <div className="mt-6 text-sm text-destructive">Failed to load audios</div>
@@ -852,7 +950,11 @@ function AudioRow({
   const handleUpdate = async () => {
     setIsSubmitting(true)
     setError(null)
-    showToast("processing", "Updating audio", "Your audio settings are being saved.")
+    showToast(
+      "processing",
+      "Updating audio",
+      "Your audio settings are being saved."
+    )
 
     try {
       const payload = {
@@ -868,7 +970,11 @@ function AudioRow({
       await queryClient.invalidateQueries({ queryKey: ["audios"] })
       setUpdateOpen(false)
       resetUpdateState()
-      showToast("success", "Audio updated", "The censor settings were updated successfully.")
+      showToast(
+        "success",
+        "Audio updated",
+        "The censor settings were updated successfully."
+      )
     } catch (err: any) {
       const message =
         err?.response?.data?.detail || err?.message || "Could not update audio."
@@ -907,7 +1013,9 @@ function AudioRow({
           </span>
         </td>
         <td className="px-4 py-3 font-medium">{audio.name}</td>
-        <td className="px-4 py-3">{audio.duration ? `${audio.duration}s` : "-"}</td>
+        <td className="px-4 py-3">
+          {audio.duration ? `${audio.duration}s` : "-"}
+        </td>
         <td className="px-4 py-3">{relativeTime(audio.updated_at)}</td>
         <td className="px-4 py-3">{audio.credits_used ?? 0}</td>
         <td className="px-4 py-3">
@@ -999,7 +1107,10 @@ function AudioRow({
               </label>
 
               <div className="space-y-2">
-                <label htmlFor={`custom-words-${audio.id}`} className="text-sm font-medium">
+                <label
+                  htmlFor={`custom-words-${audio.id}`}
+                  className="text-sm font-medium"
+                >
                   Custom words to censor
                 </label>
                 <input
@@ -1007,7 +1118,7 @@ function AudioRow({
                   value={customWords}
                   onChange={(event) => setCustomWords(event.target.value)}
                   placeholder="e.g. damn, crap, idiot"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none ring-0 placeholder:text-muted-foreground focus:border-ring"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-0 outline-none placeholder:text-muted-foreground focus:border-ring"
                 />
               </div>
 
@@ -1015,7 +1126,9 @@ function AudioRow({
                 <label className="text-sm font-medium">Sound effect</label>
                 <select
                   value={selectedSoundEffectId}
-                  onChange={(event) => setSelectedSoundEffectId(event.target.value)}
+                  onChange={(event) =>
+                    setSelectedSoundEffectId(event.target.value)
+                  }
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-ring"
                 >
                   <option value="">None</option>
@@ -1045,7 +1158,11 @@ function AudioRow({
               >
                 Cancel
               </Button>
-              <Button onClick={handleUpdate} disabled={isSubmitting} type="button">
+              <Button
+                onClick={handleUpdate}
+                disabled={isSubmitting}
+                type="button"
+              >
                 {isSubmitting ? "Saving..." : "Save changes"}
               </Button>
             </div>
