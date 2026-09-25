@@ -215,7 +215,9 @@ function AudiosTable() {
                   </span>
                 </td>
                 <td className="px-4 py-3 font-medium">{audio.name}</td>
-                <td className="px-4 py-3">{audio.duration ? `${audio.duration}s` : "-"}</td>
+                <td className="px-4 py-3">
+                  {audio.duration ? `${audio.duration}s` : "-"}
+                </td>
                 <td className="px-4 py-3">{relativeTime(audio.updated_at)}</td>
                 <td className="px-4 py-3">{audio.credits_used ?? 0}</td>
                 <td className="px-4 py-3">

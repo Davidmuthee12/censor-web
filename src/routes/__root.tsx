@@ -52,7 +52,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <QueryClientProvider client={qc}>
-          {authUrl ? <AuthProvider authUrl={authUrl}>{children}</AuthProvider> : children}
+          {authUrl ? (
+            <AuthProvider authUrl={authUrl}>{children}</AuthProvider>
+          ) : (
+            children
+          )}
         </QueryClientProvider>
         <TanStackDevtools
           config={{
