@@ -1,0 +1,10 @@
+{
+	"servers": {
+		"propelauth-mcp-server": {
+			"type": "stdio",
+			"command": "https://mcp.propelauth.com/mcp",
+			"args": []
+		}
+	},
+	"inputs": []
+}

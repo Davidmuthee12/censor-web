@@ -4,7 +4,11 @@ import { useEffect, useState } from "react"
 import { Sun, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-export default function ThemeToggle() {
+type Props = {
+  className?: string
+}
+
+export default function ThemeToggle({ className }: Props) {
   const [isDark, setIsDark] = useState<boolean>(() => {
     try {
       const t = localStorage.getItem("theme")
@@ -32,8 +36,9 @@ export default function ThemeToggle() {
     }
   }, [isDark])
 
+  // Render inline (no fixed positioning) so parent can control placement
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className={className}>
       <Button
         variant="outline"
         size="icon"

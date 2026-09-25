@@ -4,6 +4,16 @@ import { Button } from "@/components/ui/button"
 export const Route = createFileRoute("/")({ component: App })
 
 function App() {
+  const authUrl = import.meta.env.VITE_AUTH_URL ?? ""
+
+  const handleLogin = () => {
+    if (!authUrl || typeof window === "undefined") return
+    const redirect = `${window.location.origin}/dashboard`
+    window.location.href = `${authUrl.replace(/\/$/, "")}/login?redirect=${encodeURIComponent(
+      redirect
+    )}`
+  }
+
   return (
     <div className="flex min-h-svh items-center justify-center p-6">
       <div className="flex max-w-2xl flex-col items-center gap-4 px-4 text-center">
@@ -12,7 +22,9 @@ function App() {
           Automatically censor profanity in audio — protect listeners and keep
           conversations safe with a single click.
         </p>
-        <Button className="mt-4">Get started</Button>
+        <Button className="mt-4" onClick={handleLogin}>
+          Log in
+        </Button>
       </div>
     </div>
   )
