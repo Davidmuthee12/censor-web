@@ -3,6 +3,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 
 import appCss from "../styles.css?url"
+import ThemeToggle from "@/components/ui/theme-toggle"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -38,9 +39,15 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{const t=localStorage.getItem('theme');const prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;const isDark = t? (t==='dark') : prefersDark; if(isDark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');}catch(e){}})();`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
+        <ThemeToggle />
         {children}
         <TanStackDevtools
           config={{
